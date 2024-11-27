@@ -32,6 +32,11 @@ router.route('/movies').get((request, response) => {
     });
 });
 
+router.route('/test').get((req, res) => {
+    res.send('Test route is working!');
+});
+
+
 
 
 
