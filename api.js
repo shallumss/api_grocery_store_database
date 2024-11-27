@@ -13,6 +13,11 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(cors());
 app.use('/api', router);
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Something went wrong!');
+});
+
 
 
 router.use((request, response, next) => {
@@ -31,8 +36,10 @@ router.route('/movies').get((request, response) => {
 
 
 var port = process.env.PORT || 8090;
-app.listen(port);
-console.log('API is runnning at ' + port);
+app.listen(port, () => {
+    console.log('API is running at port ' + port);
+});
+
 
 
 dboperation.getMovies().then(result => {
