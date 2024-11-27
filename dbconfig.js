@@ -1,17 +1,16 @@
-const config = {
-    user: process.env.SQL_USER || 'test',
-    password: process.env.SQL_PASSWORD || 'test',
-    server: process.env.SQL_SERVER || '127.0.0.1',
-    database: process.env.SQL_DATABASE || 'IMDB_Top_1000',
+const config = {    
+    user: 'test',
+    password: 'Rfvg@qwerty',
+    server: 'shallum.database.windows.net', // Azure SQL Server address
+    database: 'IMDB_Top_1000', // Database name you created in Azure
 
     options: {
-        trustedconnection: true,
+        trustedConnection: false,  // Azure doesn't support trusted connection
+        encrypt: true,             // Required for Azure SQL Database
         enableArithAbort: true,
-        encrypt: false,
-        instancename: process.env.SQL_INSTANCE || 'SHALLUM',
     },
 
-    port: process.env.SQL_PORT || 1433,
+    port: 1433,  // Default port for Azure SQL Database
 };
 
 module.exports = config;

@@ -1,4 +1,4 @@
-var config = require('./dbconfig');
+var config = require('./db.config');
 const sql = require('mssql'); 
 
 
