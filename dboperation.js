@@ -16,8 +16,22 @@ async function getMovies() {
 
 
 }
+////query for getting the movies from the database desecnind order
+
+async function getMoviesByRatingDescending() {
+    try {
+        let pool = await sql.connect(config);
+        let movies = await pool
+            .request()
+            .query('SELECT * FROM Movies ORDER BY imdbRating DESC');
+        return movies.recordsets;
+    } catch (error) {
+        console.log(error);
+    }
+}
 
 module.exports = {  
 
-    getMovies: getMovies
+    getMovies: getMovies ,
+    getMoviesByRatingDescending: getMoviesByRatingDescending
 }
