@@ -41,9 +41,10 @@ router.route('/test').get((req, res) => {
 
 
 var port = process.env.PORT || 8090;
-app.listen(port, () => {
+app.listen(port, '0.0.0.0', () => {
     console.log('API is running at port ' + port);
 });
+
 
 
 
