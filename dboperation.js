@@ -23,12 +23,14 @@ async function getMoviesByRatingDescending() {
         let pool = await sql.connect(config);
         let movies = await pool
             .request()
-            .query('SELECT * FROM Movies ORDER BY imdbRating DESC');
+            .query('SELECT * FROM Top_1000 ORDER BY imdbRating DESC');
         return movies.recordsets;
     } catch (error) {
-        console.log(error);
+        console.error('Database error: ', error);  // Log the full error
+        throw new Error('Failed to fetch movies from the database');
     }
 }
+
 
 module.exports = {  
 
