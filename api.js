@@ -1,6 +1,9 @@
 const dboperation = require('./dboperation');
 var Db =      require('./dboperation');
-var Movie =   require('./Top_1000');
+
+
+const { getMoviesByRatingDescending, getMovies } = require('./dboperation');
+
 
 // now for api 
 var express = require('express');
@@ -33,7 +36,7 @@ router.route('/movies').get((request, response) => {
 });
 
 /// indm decsinding order movies route 
-router.route('/movies/ratingasc').get((request, response) => {
+router.route('/movies/ratingasc').get(async(request, response) => {
     dboperation.getMoviesByRatingDescending().then((result) => {
         response.json(result[0]);
     });
