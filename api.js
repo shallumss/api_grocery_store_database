@@ -33,7 +33,7 @@ router.route('/movies').get((request, response) => {
 });
 
 /// indm decsinding order movies route 
-router.route('/movies/ratingdown').get((request, response) => {
+router.route('/movies/ratingasc').get((request, response) => {
     dboperation.getMoviesByRatingDescending().then((result) => {
         response.json(result[0]);
     });
