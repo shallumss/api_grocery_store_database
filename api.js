@@ -2,7 +2,7 @@ const dboperation = require('./dboperation');
 var Db =      require('./dboperation');
 
 
-const { getMoviesByRatingDescending, getMovies } = require('./dboperation');
+const { getMoviesByRatingDescending, getMovies,userSignup } = require('./dboperation');
 
 
 // now for api 
@@ -43,6 +43,38 @@ router.route('/movies/ratingasc').get(async(request, response) => {
 });
 
 
+
+
+////////////////
+/////////////
+// New POST route for user signup
+router.route('/signup').post(async (req, res) => {
+    const { username, email, password, firstName, lastName, phone, dob, profilePicture } = req.body;
+
+    // Check if all required fields are provided
+    if (!username || !email || !password || !firstName || !lastName || !phone || !dob) {
+        return res.status(400).json({ success: false, message: 'All fields are required' });
+    }
+
+    try {
+        // Call the userSignup function from dboperation.js
+        await dboperation.userSignup(username, email, password, firstName, lastName, phone, dob, profilePicture);
+
+        res.status(201).json({
+            success: true,
+            message: 'Signup successful!',
+        });
+    } catch (error) {
+        console.error('Error during signup:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Signup failed. Please try again.',
+        });
+    }
+});
+////////////////
+/////////////
+
 router.route('/test').get((req, res) => {
     res.send('Test route is working!');
 });
@@ -59,8 +91,3 @@ app.listen(port, '0.0.0.0', () => {
 
 
 
-dboperation.getMovies().then(result => {
-    console.log(result);
-}).catch(err => {
-    console.error('Error:', err);
-});
