@@ -31,14 +31,14 @@ router.use((request, response, next) => {
 
 router.route('/movies').get((request, response) => {
     dboperation.getMovies().then(result => {
-        response.json(result[0]);
+        response.json(result);
     });
 });
 
 /// indm decsinding order movies route 
 router.route('/movies/ratingasc').get(async(request, response) => {
     dboperation.getMoviesByRatingDescending().then((result) => {
-        response.json(result[0]);
+        response.json(result);
     });
 });
 
