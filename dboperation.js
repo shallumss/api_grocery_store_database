@@ -113,7 +113,23 @@ async function userLogin(loginIdentifier, password) {
         return { success: false, message: 'Login failed. Please try again later.' };
     }
 }
+/////////////// prodect info 
 
+async function getProductDetails() {
+    try {
+        // Establish a connection to the database
+        let pool = await sql.connect(config);
+
+        // Execute the GetProductDetails stored procedure
+        let result = await pool.request().execute('GetProductDetails');
+
+        // Return the result set
+        return result.recordset;
+    } catch (error) {
+        console.error('Error fetching product details:', error);
+        throw new Error('Failed to fetch product details');
+    }
+}
 /////////////
 //////////////
 
@@ -123,5 +139,6 @@ module.exports = {
     getMovies: getMovies ,
     getMoviesByRatingDescending: getMoviesByRatingDescending,
     userSignup : userSignup ,
-    userLogin : userLogin   
+    userLogin : userLogin   ,
+    getProductDetails : getProductDetails   
 }

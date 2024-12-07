@@ -142,6 +142,25 @@ router.route('/login').post(async (req, res) => {
     }
 });
 
+///////////////product info route 
+router.get('/products', async (req, res) => {
+    try {
+        // Call the getProductDetails function
+        const products = await dboperation.getProductDetails();
+
+        // Send the product details as a response
+        res.status(200).json({
+            success: true,
+            data: products,
+        });
+    } catch (error) {
+        console.error('Error in /products route:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to fetch product details. Please try again later.',
+        });
+    }
+});
 
 
 
