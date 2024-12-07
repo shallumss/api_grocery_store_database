@@ -15,7 +15,7 @@ var router = express.Router();
 app.use(bodyParser.urlencoded({extended: true})); 
 app.use(bodyParser.json());
 app.use(cors());
-app.use('/api', router);
+app.use('/store', router);
 app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).send('Something went wrong!');
@@ -48,17 +48,46 @@ router.route('/movies/ratingasc').get(async(request, response) => {
 ////////////////
 /////////////
 // New POST route for user signup
+// POST route for user signup
 router.route('/signup').post(async (req, res) => {
-    const { username, email, password, firstName, lastName, phone, dob, profilePicture } = req.body;
+    const {
+        username,
+        email,
+        password,
+        firstName,
+        lastName,
+        phone,
+        dob,
+        profilePicture,
+        country,
+        city,
+        state,
+        house,
+        postalCode
+    } = req.body;
 
     // Check if all required fields are provided
-    if (!username || !email || !password || !firstName || !lastName || !phone || !dob) {
-        return res.status(400).json({ success: false, message: 'All fields are required' });
+    if (!username || !email || !password || !firstName || !lastName || !country || !city || !house || !postalCode) {
+        return res.status(400).json({ success: false, message: 'All required fields must be provided' });
     }
 
     try {
-        // Call the userSignup function from dboperation.js
-        await dboperation.userSignup(username, email, password, firstName, lastName, phone, dob, profilePicture);
+        // Call the userSignup function
+        await dboperation.userSignup(
+            username,
+            email,
+            password,
+            firstName,
+            lastName,
+            phone,
+            dob,
+            profilePicture,
+            country,
+            city,
+            state,
+            house,
+            postalCode
+        );
 
         res.status(201).json({
             success: true,
@@ -71,7 +100,51 @@ router.route('/signup').post(async (req, res) => {
             message: 'Signup failed. Please try again.',
         });
     }
+});  
+
+///////// login route 
+
+router.route('/login').post(async (req, res) => {
+    const { loginIdentifier, password } = req.body;
+
+    // Validate input
+    if (!loginIdentifier || !password) {
+        return res.status(400).json({
+            success: false,
+            message: 'Both login identifier (email/username) and password are required.',
+        });
+    }
+
+    try {
+        // Call the userLogin function
+        const loginResult = await dboperation.userLogin(loginIdentifier, password);
+
+        if (loginResult.success) {
+            // Send the user_id along with the success message
+            res.status(200).json({
+                success: true,
+                userId: loginResult.userId, // Return the user_id in the response
+                message: 'Login successful!',
+            });
+        } else {
+            // Return failure response when credentials are incorrect
+            res.status(401).json({
+                success: false,
+                message: loginResult.message || 'Login failed. Please check your credentials and try again.',
+            });
+        }
+    } catch (error) {
+        console.error('Error during login:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Login failed. Please try again later.',
+        });
+    }
 });
+
+
+
+
 ////////////////
 /////////////
 
