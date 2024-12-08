@@ -130,6 +130,72 @@ async function getProductDetails() {
         throw new Error('Failed to fetch product details');
     }
 }
+/////////
+// Add or Update Item in Cart
+async function addToCart(user_id, product_id, quantity) {
+    try {
+        const result = await pool.request()
+            .input('user_id', sql.Int, user_id)
+            .input('product_id', sql.Int, product_id)
+            .input('quantity', sql.Int, quantity)
+            .execute('AddToCart'); // Call the stored procedure
+        return result.rowsAffected;
+    } catch (err) {
+        throw new Error(`Error adding to cart: ${err.message}`);
+    }
+}
+
+// View Cart
+async function viewCart(user_id) {
+    try {
+        const result = await pool.request()
+            .input('user_id', sql.Int, user_id)
+            .execute('ViewCart'); // Call the stored procedure
+        return result.recordset;
+    } catch (err) {
+        throw new Error(`Error fetching cart: ${err.message}`);
+    }
+}
+
+// Update Product Quantity
+async function updateCart(user_id, product_id, quantity) {
+    try {
+        const result = await pool.request()
+            .input('user_id', sql.Int, user_id)
+            .input('product_id', sql.Int, product_id)
+            .input('quantity', sql.Int, quantity)
+            .execute('UpdateCart'); // Call the stored procedure
+        return result.rowsAffected;
+    } catch (err) {
+        throw new Error(`Error updating cart: ${err.message}`);
+    }
+}
+
+// Remove Item from Cart
+async function removeFromCart(user_id, product_id) {
+    try {
+        const result = await pool.request()
+            .input('user_id', sql.Int, user_id)
+            .input('product_id', sql.Int, product_id)
+            .execute('RemoveFromCart'); // Call the stored procedure
+        return result.rowsAffected;
+    } catch (err) {
+        throw new Error(`Error removing from cart: ${err.message}`);
+    }
+}
+
+// Clear Cart
+async function clearCart(user_id) {
+    try {
+        const result = await pool.request()
+            .input('user_id', sql.Int, user_id)
+            .execute('ClearCart'); // Call the stored procedure
+        return result.rowsAffected;
+    } catch (err) {
+        throw new Error(`Error clearing cart: ${err.message}`);
+    }
+}
+
 /////////////
 //////////////
 
@@ -140,5 +206,10 @@ module.exports = {
     getMoviesByRatingDescending: getMoviesByRatingDescending,
     userSignup : userSignup ,
     userLogin : userLogin   ,
-    getProductDetails : getProductDetails   
+    getProductDetails : getProductDetails    ,
+    addToCart: addToCart,
+    viewCart: viewCart,
+    updateCart  : updateCart,
+    removeFromCart  : removeFromCart,
+    clearCart   : clearCart 
 }

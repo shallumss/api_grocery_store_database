@@ -162,6 +162,61 @@ router.get('/products', async (req, res) => {
     }
 });
 
+///////// 
+// Add an item to the cart
+router.post('/add', async (req, res) => {
+    const { user_id, product_id, quantity } = req.body;
+    try {
+        const result = await cartOperations.addToCart(user_id, product_id, quantity);
+        res.status(200).json({ message: 'Product added to cart successfully!', rowsAffected: result });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// View cart
+router.get('/:user_id', async (req, res) => {
+    const user_id = parseInt(req.params.user_id, 10);
+    try {
+        const cart = await cartOperations.viewCart(user_id);
+        res.status(200).json({ cart });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Update product quantity in the cart
+router.put('/update', async (req, res) => {
+    const { user_id, product_id, quantity } = req.body;
+    try {
+        const result = await cartOperations.updateCart(user_id, product_id, quantity);
+        res.status(200).json({ message: 'Cart updated successfully!', rowsAffected: result });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Remove an item from the cart
+router.delete('/remove', async (req, res) => {
+    const { user_id, product_id } = req.body;
+    try {
+        const result = await cartOperations.removeFromCart(user_id, product_id);
+        res.status(200).json({ message: 'Product removed from cart!', rowsAffected: result });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Clear the cart
+router.delete('/clear/:user_id', async (req, res) => {
+    const user_id = parseInt(req.params.user_id, 10);
+    try {
+        const result = await cartOperations.clearCart(user_id);
+        res.status(200).json({ message: 'Cart cleared successfully!', rowsAffected: result });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
 
 
 ////////////////
