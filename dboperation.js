@@ -90,8 +90,8 @@ async function userLogin(loginIdentifier, password) {
 
         // Call the UserLogin stored procedure
         let result = await pool.request()
-            .input('LoginIdentifier', sql.NVarChar(100), loginIdentifier)
-            .input('Password', sql.NVarChar(255), password) // Plain text password
+            .input('LoginIdentifier', sql.VarChar(100), loginIdentifier)
+            .input('Password', sql.VarChar(255), password) // Plain text password
             .execute('UserLogin');
 
         if (result.recordset.length > 0 && result.recordset[0].user_id) {
@@ -133,8 +133,11 @@ async function getProductDetails() {
 /////////
 // Add or Update Item in Cart
 async function addToCart(user_id, product_id, quantity) {
-    try {
-        const result = await pool.request()
+    try { 
+        // Establish a connection to the database
+        let pool = await sql.connect(config);
+
+        let  result = await pool.request()
             .input('user_id', sql.Int, user_id)
             .input('product_id', sql.Int, product_id)
             .input('quantity', sql.Int, quantity)
@@ -147,8 +150,10 @@ async function addToCart(user_id, product_id, quantity) {
 
 // View Cart
 async function viewCart(user_id) {
-    try {
-        const result = await pool.request()
+    try { // Establish a connection to the database
+        let pool = await sql.connect(config);
+
+        let  result = await pool.request()
             .input('user_id', sql.Int, user_id)
             .execute('ViewCart'); // Call the stored procedure
         return result.recordset;
@@ -159,8 +164,10 @@ async function viewCart(user_id) {
 
 // Update Product Quantity
 async function updateCart(user_id, product_id, quantity) {
-    try {
-        const result = await pool.request()
+    try {// Establish a connection to the database
+        let pool = await sql.connect(config);
+
+        let result = await pool.request()
             .input('user_id', sql.Int, user_id)
             .input('product_id', sql.Int, product_id)
             .input('quantity', sql.Int, quantity)
@@ -173,8 +180,11 @@ async function updateCart(user_id, product_id, quantity) {
 
 // Remove Item from Cart
 async function removeFromCart(user_id, product_id) {
-    try {
-        const result = await pool.request()
+    try { 
+        // Establish a connection to the database
+        let pool = await sql.connect(config);
+
+        let result = await pool.request()
             .input('user_id', sql.Int, user_id)
             .input('product_id', sql.Int, product_id)
             .execute('RemoveFromCart'); // Call the stored procedure
@@ -187,7 +197,11 @@ async function removeFromCart(user_id, product_id) {
 // Clear Cart
 async function clearCart(user_id) {
     try {
-        const result = await pool.request()
+        // Establish a connection to the database
+        let pool = await sql.connect(config);
+
+
+        let result = await pool.request()
             .input('user_id', sql.Int, user_id)
             .execute('ClearCart'); // Call the stored procedure
         return result.rowsAffected;

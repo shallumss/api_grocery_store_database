@@ -167,7 +167,7 @@ router.get('/products', async (req, res) => {
 router.post('/add', async (req, res) => {
     const { user_id, product_id, quantity } = req.body;
     try {
-        const result = await cartOperations.addToCart(user_id, product_id, quantity);
+        const result = await dboperation.addToCart(user_id, product_id, quantity);
         res.status(200).json({ message: 'Product added to cart successfully!', rowsAffected: result });
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -178,7 +178,7 @@ router.post('/add', async (req, res) => {
 router.get('/:user_id', async (req, res) => {
     const user_id = parseInt(req.params.user_id, 10);
     try {
-        const cart = await cartOperations.viewCart(user_id);
+        const cart = await dboperation.viewCart(user_id);
         res.status(200).json({ cart });
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -189,7 +189,7 @@ router.get('/:user_id', async (req, res) => {
 router.put('/update', async (req, res) => {
     const { user_id, product_id, quantity } = req.body;
     try {
-        const result = await cartOperations.updateCart(user_id, product_id, quantity);
+        const result = await dboperation.updateCart(user_id, product_id, quantity);
         res.status(200).json({ message: 'Cart updated successfully!', rowsAffected: result });
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -200,7 +200,7 @@ router.put('/update', async (req, res) => {
 router.delete('/remove', async (req, res) => {
     const { user_id, product_id } = req.body;
     try {
-        const result = await cartOperations.removeFromCart(user_id, product_id);
+        const result = await dboperation.removeFromCart(user_id, product_id);
         res.status(200).json({ message: 'Product removed from cart!', rowsAffected: result });
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -211,7 +211,7 @@ router.delete('/remove', async (req, res) => {
 router.delete('/clear/:user_id', async (req, res) => {
     const user_id = parseInt(req.params.user_id, 10);
     try {
-        const result = await cartOperations.clearCart(user_id);
+        const result = await dboperation.clearCart(user_id);
         res.status(200).json({ message: 'Cart cleared successfully!', rowsAffected: result });
     } catch (err) {
         res.status(500).json({ error: err.message });
