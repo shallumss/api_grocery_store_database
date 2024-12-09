@@ -208,8 +208,8 @@ router.delete('/remove', async (req, res) => {
 });
 
 // Clear the cart
-router.delete('/clear/:user_id', async (req, res) => {
-    const user_id = parseInt(req.params.user_id, 10);
+router.post('/cart/clear', async (req, res) => {
+    const { user_id } = req.body;
     try {
         const result = await dboperation.clearCart(user_id);
         res.status(200).json({ message: 'Cart cleared successfully!', rowsAffected: result });
@@ -217,6 +217,7 @@ router.delete('/clear/:user_id', async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 });
+
 
 
 ////////////////
