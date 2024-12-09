@@ -210,6 +210,23 @@ async function clearCart(user_id) {
     }
 }
 
+////cart checkout  
+
+async function checkout(user_id) {
+    try {
+        // Establish a connection to the database
+        let pool = await sql.connect(config);
+
+
+        let result = await pool.request()
+            .input('user_id', sql.Int, user_id)
+            .execute('Checkout'); // Call the stored procedure
+        return result.rowsAffected;
+    } catch (err) {
+        throw new Error(`Error checking out cart: ${err.message}`);
+    }
+}
+
 /////////////
 //////////////
 

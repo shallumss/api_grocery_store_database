@@ -219,6 +219,18 @@ router.post('/cart/clear', async (req, res) => {
 });
 
 
+//// cart checkout  
+router.post('/cart/checkout', async (req, res) => {
+    const { user_id } = req.body;
+    try {
+        const result = await dboperation.checkout(user_id);
+        res.status(200).json({ message: 'Checkout successful!', rowsAffected: result });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+
 
 ////////////////
 /////////////
