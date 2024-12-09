@@ -175,8 +175,8 @@ router.post('/add', async (req, res) => {
 });
 
 // View cart
-router.get('/cart/view', async (req, res) => {
-    const user_id = parseInt(req.params.user_id, 10);
+router.post('/cart/view', async (req, res) => {
+    const user_id = req.body.user_id; // Read user_id from the POST body
     try {
         const cart = await dboperation.viewCart(user_id);
         res.status(200).json({ cart });
