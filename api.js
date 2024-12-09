@@ -230,6 +230,29 @@ router.post('/cart/checkout', async (req, res) => {
     }
 });
 
+/////////now for checkout order 
+
+router.post('/user/orders', async (req, res) => {
+    const { user_id } = req.body;
+    try {
+        // Call the correct dboperation function
+        const result = await dboperation.vieworders(user_id);
+        res.status(200).json(result);  // Use the result directly here
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+router.post('/user/order/details', async (req, res) => {
+    const { order_id } = req.body;
+    try {
+        // Correctly call the function for order details
+        const result = await dboperation.orderdetail(order_id);
+        res.status(200).json(result);  // Use the result directly here
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
 
 
 ////////////////

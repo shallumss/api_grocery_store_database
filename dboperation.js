@@ -226,6 +226,32 @@ async function checkout(user_id) {
         throw new Error(`Error checking out cart: ${err.message}`);
     }
 }
+///////////view the specific orders of the user
+// Function to get orders for a specific user
+async function vieworders(user_id) {
+    try {
+        let pool = await sql.connect(config);
+        let result = await pool.request()
+            .input('user_id', sql.Int, user_id)
+            .execute('ViewUserOrders'); // Call the stored procedure
+        return result.recordset;  // Return the recordset containing the orders
+    } catch (err) {
+        throw new Error(`Error loading orders: ${err.message}`);
+    }
+}
+
+// Function to get details for a specific order
+async function orderdetail(order_id) {
+    try {
+        let pool = await sql.connect(config);
+        let result = await pool.request()
+            .input('order_id', sql.Int, order_id)
+            .execute('ViewOrderItems'); // Call the stored procedure
+        return result.recordset;  // Return the recordset containing order items
+    } catch (err) {
+        throw new Error(`Error loading order details: ${err.message}`);
+    }
+}
 
 /////////////
 //////////////
@@ -243,5 +269,8 @@ module.exports = {
     updateCart  : updateCart,
     removeFromCart  : removeFromCart,
     clearCart   : clearCart ,
-    checkout : checkout 
+    checkout : checkout ,
+    vieworders : vieworders  ,
+    orderdetail : orderdetail
+
 }
