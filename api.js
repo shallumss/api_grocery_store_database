@@ -197,7 +197,7 @@ router.put('/update', async (req, res) => {
 });
 
 // Remove an item from the cart
-router.delete('/remove', async (req, res) => {
+router.post('/cart/product/remove', async (req, res) => {
     const { user_id, product_id } = req.body;
     try {
         const result = await dboperation.removeFromCart(user_id, product_id);
