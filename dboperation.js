@@ -242,5 +242,6 @@ module.exports = {
     viewCart: viewCart,
     updateCart  : updateCart,
     removeFromCart  : removeFromCart,
-    clearCart   : clearCart 
+    clearCart   : clearCart ,
+    checkout : checkout 
 }
