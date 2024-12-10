@@ -281,6 +281,22 @@ router.get('/admin/orders/pending', async (req, res) => {
     }
 });
 
+/////////////
+router.post('/admin/order/change/status', async (req, res) => {
+    const { order_id, status_id } = req.body; // Extract `order_id` and `status_id` from the request body
+    
+    if (!order_id || !status_id) {
+        return res.status(400).json({ error: 'order_id and status_id are required.' }); // Validate inputs
+    }
+
+    try {
+        // Call the ChangeStatus procedure to update the order status
+        const result = await dboperation.changeStatus(order_id, status_id);
+        res.status(200).json({ message: 'Order status updated successfully!', result }); // Return success message
+    } catch (err) {
+        res.status(500).json({ error: `Error changing order status: ${err.message}` }); // Handle errors
+    }
+});
 
 ////////////////
 /////////////

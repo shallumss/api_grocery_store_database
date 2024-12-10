@@ -280,6 +280,26 @@ async function getPendingOrDispatchOrders() {
         throw new Error(`Error loading orders: ${err.message}`); // Handle errors
     }
 }
+
+
+////////////
+
+async function changeStatus(order_id, status_id) {
+    try {
+        let pool = await sql.connect(config); // Connect to the database
+        let result = await pool.request()
+            .input('order_id', sql.Int, order_id) // Pass order_id as INT
+            .input('status_id', sql.Int, status_id) // Pass status_id as INT
+            .execute('ChangeStatus'); // Call the stored procedure
+        return result.rowsAffected; // Return the rows affected (number of records updated)
+    } catch (err) {
+        throw new Error(`Error changing order status: ${err.message}`); // Handle errors
+    }
+}
+
+
+
+
 /////////////
 //////////////
 
@@ -300,5 +320,6 @@ module.exports = {
     vieworders : vieworders  ,
     orderdetail : orderdetail ,
     search : search  ,
-    getPendingOrDispatchOrders : getPendingOrDispatchOrders
+    getPendingOrDispatchOrders : getPendingOrDispatchOrders,
+    changeStatus : changeStatus
 }
