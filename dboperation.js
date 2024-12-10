@@ -193,6 +193,7 @@ async function removeFromCart(user_id, product_id) {
         throw new Error(`Error removing from cart: ${err.message}`);
     }
 }
+///
 
 // Clear Cart
 async function clearCart(user_id) {
