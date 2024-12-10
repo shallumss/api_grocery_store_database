@@ -268,6 +268,19 @@ router.post('/products/search', async (req, res) => {
 });
 
 
+////now for the admin 
+
+// Admin route to get pending or dispatched orders
+router.get('/admin/orders/pending', async (req, res) => {
+    try {
+        // Call the stored procedure to get pending or dispatched orders
+        const result = await dboperation.getPendingOrDispatchOrders();
+        res.status(200).json(result); // Send the results to the admin
+    } catch (err) {
+        res.status(500).json({ error: err.message }); // Handle errors
+    }
+});
+
 
 ////////////////
 /////////////

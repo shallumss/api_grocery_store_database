@@ -267,6 +267,19 @@ async function search(product_name) {
     }
 }
 
+
+//// now for the admin part of the project
+
+async function getPendingOrDispatchOrders() {
+    try {
+        let pool = await sql.connect(config); // Connect to the database
+        let result = await pool.request()
+            .execute('GetPendingOrDispatchOrders'); // Call the stored procedure
+        return result.recordset; // Return the list of orders
+    } catch (err) {
+        throw new Error(`Error loading orders: ${err.message}`); // Handle errors
+    }
+}
 /////////////
 //////////////
 
@@ -286,5 +299,6 @@ module.exports = {
     checkout : checkout ,
     vieworders : vieworders  ,
     orderdetail : orderdetail ,
-    search : search 
+    search : search  ,
+    getPendingOrDispatchOrders : getPendingOrDispatchOrders
 }
