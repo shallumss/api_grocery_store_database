@@ -252,6 +252,19 @@ async function orderdetail(order_id) {
         throw new Error(`Error loading order details: ${err.message}`);
     }
 }
+///// now function for the user search of products  in the database
+
+async function search(product_name) {
+    try {
+        let pool = await sql.connect(config);
+        let result = await pool.request()
+            .input('product_name', sql.NVarChar(255), product_name) // Correct input type
+            .execute('product_search'); // Call the stored procedure
+        return result.recordset; // Return the recordset
+    } catch (err) {
+        throw new Error(`Error loading products: ${err.message}`);
+    }
+}
 
 /////////////
 //////////////
@@ -271,6 +284,6 @@ module.exports = {
     clearCart   : clearCart ,
     checkout : checkout ,
     vieworders : vieworders  ,
-    orderdetail : orderdetail
-
+    orderdetail : orderdetail ,
+    search : search 
 }

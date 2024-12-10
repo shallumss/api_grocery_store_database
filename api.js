@@ -254,6 +254,20 @@ router.post('/user/order/details', async (req, res) => {
     }
 });
 
+///////////user search api 
+
+
+router.post('/products/search', async (req, res) => {
+    const { product_name } = req.body; // Correctly extract `product_name`
+    try {
+        const result = await dboperation.search(product_name); // Pass `product_name` to the search function
+        res.status(200).json(result); // Return the search results
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+
 
 ////////////////
 /////////////
