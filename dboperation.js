@@ -298,6 +298,18 @@ async function changeStatus(order_id, status_id) {
 }
 
 
+//// when admin cancel the order
+async function cancelOrder(order_id) {
+    try {
+        let pool = await sql.connect(config); // Connect to the database
+        let result = await pool.request()
+            .input('order_id', sql.Int, order_id) // Pass order_id as input
+            .execute('CancelOrder'); // Call the stored procedure
+        return result.rowsAffected; // Return the rows affected
+    } catch (err) {
+        throw new Error(`Error canceling order: ${err.message}`);
+    }
+}
 
 
 /////////////
@@ -321,5 +333,6 @@ module.exports = {
     orderdetail : orderdetail ,
     search : search  ,
     getPendingOrDispatchOrders : getPendingOrDispatchOrders,
-    changeStatus : changeStatus
+    changeStatus : changeStatus  ,
+    cancelOrder : cancelOrder
 }
