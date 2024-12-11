@@ -299,21 +299,7 @@ router.post('/admin/order/change/status', async (req, res) => {
 });
 
 ///////when admin cancels the order 
-router.post('/admin/order/cancel', async (req, res) => {
-    const { order_id } = req.body;
 
-    if (!order_id) {
-        return res.status(400).json({ error: 'order_id is required.' }); // Validate input
-    }
-
-    try {
-        // Call the CancelOrder procedure
-        const result = await dboperation.cancelOrder(order_id);
-        res.status(200).json({ message: 'Order canceled successfully!', rowsAffected: result });
-    } catch (err) {
-        res.status(500).json({ error: `Error canceling order: ${err.message}` });
-    }
-});
 
 ////////////////
 /////////////

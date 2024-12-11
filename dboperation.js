@@ -290,7 +290,7 @@ async function changeStatus(order_id, status_id) {
         let result = await pool.request()
             .input('order_id', sql.Int, order_id) // Pass order_id as INT
             .input('status_id', sql.Int, status_id) // Pass status_id as INT
-            .execute('ChangeStatus'); // Call the stored procedure
+            .execute('ChangeOrderStatus'); // Call the stored procedure
         return result.rowsAffected; // Return the rows affected (number of records updated)
     } catch (err) {
         throw new Error(`Error changing order status: ${err.message}`); // Handle errors
@@ -299,17 +299,7 @@ async function changeStatus(order_id, status_id) {
 
 
 //// when admin cancel the order
-async function cancelOrder(order_id) {
-    try {
-        let pool = await sql.connect(config); // Connect to the database
-        let result = await pool.request()
-            .input('order_id', sql.Int, order_id) // Pass order_id as input
-            .execute('CancelOrder'); // Call the stored procedure
-        return result.rowsAffected; // Return the rows affected
-    } catch (err) {
-        throw new Error(`Error canceling order: ${err.message}`);
-    }
-}
+
 
 
 /////////////
@@ -333,6 +323,5 @@ module.exports = {
     orderdetail : orderdetail ,
     search : search  ,
     getPendingOrDispatchOrders : getPendingOrDispatchOrders,
-    changeStatus : changeStatus  ,
-    cancelOrder : cancelOrder
+    changeStatus : changeStatus
 }
