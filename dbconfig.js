@@ -1,10 +1,10 @@
 require('dotenv').config();  // Read .env file if present
 
 const config = {    
-    user: 'shallum',
-    password: 'Rfvg@qwerty123456??',
-    server: 'shallum.database.windows.net' , // Azure SQL Server address
-    database:  'store', // Database name you created in Azure
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    server: process.env.DB_SERVER , // Azure SQL Server address
+    database:  process.env.DB_DATABASE, // Database name you created in Azure
 
     options: {
         trustedConnection: false,  // Azure doesn't support trusted connection
@@ -16,8 +16,8 @@ const config = {
     authentication: {
         type: 'default',
         options: {
-            userName: 'shallum',
-            password: 'Rfvg@qwerty123456??'
+            userName: process.env.DB_USER,
+            password: process.env.DB_PASSWORD
         }
     },
     port: 1433 // Standard Azure SQL Database port
