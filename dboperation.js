@@ -117,17 +117,54 @@ async function userLogin(loginIdentifier, password) {
 
 async function getProductDetails() {
     try {
-        // Establish a connection to the database
-        let pool = await sql.connect(config);
+        // Log the configuration for debugging
+        console.log('Database Configuration:', {
+            server: process.env.DB_SERVER,
+            database: process.env.DB_DATABASE,
+            user: process.env.DB_USER ? 'User is set' : 'User is NOT set',
+            serverLength: process.env.DB_SERVER ? process.env.DB_SERVER.length : 'No server defined'
+        });
 
-        // Execute the GetProductDetails stored procedure
-        let result = await pool.request().execute('GetProductDetails');
+        // Validate configuration
+        if (!process.env.DB_SERVER) {
+            throw new Error('Database server is not defined in environment variables');
+        }
 
-        // Return the result set
+        // Ensure the server is a full Azure SQL server address
+        const fullServerAddress = process.env.DB_SERVER.includes('.database.windows.net') 
+            ? process.env.DB_SERVER 
+            : `${process.env.DB_SERVER}.database.windows.net`;
+
+        // Create a new configuration object each time to ensure fresh values
+        const connectionConfig = {
+            ...config,
+            server: fullServerAddress
+        };
+
+        // Log the full server address
+        console.log('Attempting to connect to server:', fullServerAddress);
+
+        // Establish connection
+        await sql.connect(connectionConfig);
+
+        // Execute stored procedure
+        const result = await sql.query`EXEC GetProductDetails`;
+
+        // Close the connection
+        await sql.close();
+
         return result.recordset;
     } catch (error) {
-        console.error('Error fetching product details:', error);
-        throw new Error('Failed to fetch product details');
+        // Detailed error logging
+        console.error('Detailed Database Connection Error:', {
+            message: error.message,
+            name: error.name,
+            stack: error.stack,
+            originalError: error
+        });
+
+        // Rethrow or handle the error appropriately
+        throw new Error(`Failed to fetch product details: ${error.message}`);
     }
 }
 /////////
