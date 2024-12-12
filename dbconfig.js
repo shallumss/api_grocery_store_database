@@ -13,6 +13,15 @@ const config = {
         trustServerCertificate: true // Required for Azure SQL Database
     },
 
+    authentication: {
+        type: 'default',
+        options: {
+            userName: process.env.DB_USER,
+            password: process.env.DB_PASSWORD
+        }
+    },
+    port: 1433 // Standard Azure SQL Database port
+
    
 };
 
