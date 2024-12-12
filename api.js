@@ -154,10 +154,18 @@ router.get('/products', async (req, res) => {
             data: products,
         });
     } catch (error) {
-        console.error('Error in /products route:', error);
+        // Log the full error for server-side tracking
+        console.error('Detailed Error in /products route:', {
+            message: error.message,
+            stack: error.stack,
+            name: error.name
+        });
+
+        // Send a more informative error response
         res.status(500).json({
             success: false,
-            message: 'Failed to fetch product details. Please try again later.',
+            message: 'Failed to fetch product details.',
+            errorDetails: process.env.NODE_ENV !== 'production' ? error.message : undefined
         });
     }
 });
