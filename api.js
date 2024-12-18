@@ -336,7 +336,7 @@ router.post('/products/search', async (req, res) => {
 });
 ////////////////////// get supplier 
 // Endpoint to get suppliers for filters
-router.get('/store/suppliers', async (req, res) => {
+router.get('/suppliers', async (req, res) => {
     try {
         const suppliers = await dboperation.getSuppliers();  // Call the function for getting suppliers
         res.status(200).json(suppliers);  // Return the list of suppliers as JSON
@@ -349,7 +349,7 @@ router.get('/store/suppliers', async (req, res) => {
 ////////////////get categories 
 
 // Endpoint to get categories for filters
-router.get('/store/categories', async (req, res) => {
+router.get('/categories', async (req, res) => {
     try {
         const categories = await dboperation.getCategories();  // Call the function for getting categories
         res.status(200).json(categories);  // Return the list of categories as JSON
