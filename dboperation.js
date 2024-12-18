@@ -292,17 +292,17 @@ async function orderdetail(order_id) {
 }
 ///// now function for the user search of products  in the database
 
-async function search(product_name) {
-    try {
-        let pool = await sql.connect(config);
-        let result = await pool.request()
-            .input('product_name', sql.NVarChar(255), product_name) // Correct input type
-            .execute('product_search'); // Call the stored procedure
-        return result.recordset; // Return the recordset
-    } catch (err) {
-        throw new Error(`Error loading products: ${err.message}`);
-    }
-}
+// async function search(product_name) {
+//     try {
+//         let pool = await sql.connect(config);
+//         let result = await pool.request()
+//             .input('product_name', sql.NVarChar(255), product_name) // Correct input type
+//             .execute('product_search'); // Call the stored procedure
+//         return result.recordset; // Return the recordset
+//     } catch (err) {
+//         throw new Error(`Error loading products: ${err.message}`);
+//     }
+// }
 
 
 //// now for the admin part of the project
@@ -337,6 +337,50 @@ async function changeStatus(order_id, status_id) {
 
 //// when admin cancel the order
 
+////// for the advanced user search 
+
+// Function to search products based on filters (name, category, supplier)
+async function productSearch({ product_name, supplier, category }) {
+    try {
+        let pool = await sql.connect(config);
+        let result = await pool.request()
+            .input('product_name', sql.VarChar, product_name)
+            .input('supplier_id', sql.Int, supplier)
+            .input('category_id', sql.Int, category)
+            .execute('product_search'); // Call the product search stored procedure
+
+        return result.recordset;  // Return the recordset containing product search results
+    } catch (err) {
+        throw new Error(`Error searching products: ${err.message}`);
+    }
+}
+/////////////// for suppliers 
+// Function to get all suppliers
+async function getSuppliers() {
+    try {
+        let pool = await sql.connect(config);
+        let result = await pool.request()
+            .execute('get_suppliers'); // Call the stored procedure for suppliers
+
+        return result.recordset;  // Return the list of suppliers
+    } catch (err) {
+        throw new Error(`Error getting suppliers: ${err.message}`);
+    }
+}
+
+/////////// for categories 
+// Function to get all categories
+async function getCategories() {
+    try {
+        let pool = await sql.connect(config);
+        let result = await pool.request()
+            .execute('get_categories'); // Call the stored procedure for categories
+
+        return result.recordset;  // Return the list of categories
+    } catch (err) {
+        throw new Error(`Error getting categories: ${err.message}`);
+    }
+}
 
 
 /////////////
@@ -358,7 +402,10 @@ module.exports = {
     checkout : checkout ,
     vieworders : vieworders  ,
     orderdetail : orderdetail ,
-    search : search  ,
+   // search : search  ,
     getPendingOrDispatchOrders : getPendingOrDispatchOrders,
-    changeStatus : changeStatus
+    changeStatus : changeStatus ,
+    productSearch : productSearch ,
+    getSuppliers : getSuppliers ,
+    getCategories : getCategories 
 }

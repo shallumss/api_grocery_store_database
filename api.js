@@ -265,15 +265,15 @@ router.post('/user/order/details', async (req, res) => {
 ///////////user search api 
 
 
-router.post('/products/search', async (req, res) => {
-    const { product_name } = req.body; // Correctly extract `product_name`
-    try {
-        const result = await dboperation.search(product_name); // Pass `product_name` to the search function
-        res.status(200).json(result); // Return the search results
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-});
+// router.post('/products/search', async (req, res) => {
+//     const { product_name } = req.body; // Correctly extract `product_name`
+//     try {
+//         const result = await dboperation.search(product_name); // Pass `product_name` to the search function
+//         res.status(200).json(result); // Return the search results
+//     } catch (err) {
+//         res.status(500).json({ error: err.message });
+//     }
+// });
 
 
 ////now for the admin 
@@ -307,6 +307,46 @@ router.post('/admin/order/change/status', async (req, res) => {
 });
 
 ///////when admin cancels the order 
+
+////////////////advane search functionality for the user 
+
+// Endpoint to search products with filters (name, supplier, category)
+router.post('/products/search', async (req, res) => {
+    const { product_name, supplier, category } = req.body;
+    try {
+        const products = await dboperation.productSearch({
+            product_name, 
+            supplier: supplier || null,  // Optional parameters
+            category: category || null   // Optional parameters
+        });
+        res.status(200).json(products);  // Return the products as JSON
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+////////////////////// get supplier 
+// Endpoint to get suppliers for filters
+router.get('/store/suppliers', async (req, res) => {
+    try {
+        const suppliers = await dboperation.getSuppliers();  // Call the function for getting suppliers
+        res.status(200).json(suppliers);  // Return the list of suppliers as JSON
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+
+////////////////get categories 
+
+// Endpoint to get categories for filters
+router.get('/store/categories', async (req, res) => {
+    try {
+        const categories = await dboperation.getCategories();  // Call the function for getting categories
+        res.status(200).json(categories);  // Return the list of categories as JSON
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
 
 
 ////////////////
