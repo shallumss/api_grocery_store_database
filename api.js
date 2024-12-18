@@ -312,15 +312,25 @@ router.post('/admin/order/change/status', async (req, res) => {
 
 // Endpoint to search products with filters (name, supplier, category)
 router.post('/products/search', async (req, res) => {
-    const { product_name, supplier, category } = req.body;
+   // console.log('Received request body:', req.body);
+    const { product_name, supplier_id, category_id } = req.body;
+    
+ //   console.log('Parsed parameters:');
+   // console.log('product_name:', product_name);
+   // console.log('supplier_id:', supplier_id);
+   // console.log('category_id:', category_id);
+
     try {
         const products = await dboperation.productSearch({
-            product_name, 
-            supplier: supplier || null,  // Optional parameters
-            category: category || null   // Optional parameters
+            product_name: product_name || null, 
+            supplier: supplier_id || null,
+            category: category_id || null
         });
-        res.status(200).json(products);  // Return the products as JSON
+        
+     //   console.log('Number of products returned:', products.length);
+        res.status(200).json(products);
     } catch (err) {
+       // console.error('Error in product search:', err);
         res.status(500).json({ error: err.message });
     }
 });

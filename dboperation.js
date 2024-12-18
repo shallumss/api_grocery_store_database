@@ -343,14 +343,28 @@ async function changeStatus(order_id, status_id) {
 async function productSearch({ product_name, supplier, category }) {
     try {
         let pool = await sql.connect(config);
-        let result = await pool.request()
-            .input('product_name', sql.VarChar, product_name)
-            .input('supplier_id', sql.Int, supplier)
-            .input('category_id', sql.Int, category)
-            .execute('product_search'); // Call the product search stored procedure
+        let request = pool.request();
 
-        return result.recordset;  // Return the recordset containing product search results
+       // console.log('Executing search with parameters:');
+       // console.log('product_name:', product_name);
+       // console.log('supplier:', supplier);
+       // console.log('category:', category);
+
+        // Explicitly handle parameters
+        if (product_name !== null && product_name !== undefined) {
+            request.input('product_name', sql.NVarChar, product_name);
+        }
+        if (supplier !== null && supplier !== undefined) {
+            request.input('supplier_id', sql.Int, supplier);
+        }
+        if (category !== null && category !== undefined) {
+            request.input('category_id', sql.Int, category);
+        }
+
+        let result = await request.execute('product_search');
+        return result.recordset;
     } catch (err) {
+      //  console.error('Database error:', err);
         throw new Error(`Error searching products: ${err.message}`);
     }
 }
